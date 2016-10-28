@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pro">
+ <select id="selectSawonAll" resultType="sdto">
+ select sawon_no,sawon_name,ifnull(buser_name,'기타') as buser_name,sawon_jik,CONCAT(substring(sawon_ibsail,1,4),'년  ',QUARTER(sawon_ibsail),'사분기') as sawon_ibsail from sawon left outer join buser on buser_num = buser_no
+ </select>
+ 
+</mapper>

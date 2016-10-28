@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+	<!-- target class -->
+	<bean id="targetBean" class="pack.MessageImpl">
+		<property name="name" value="한국인"/>
+	</bean>
+	
+	<!--  advice(aspect) : target으로 weaving -->
+	<bean id="logginAdvice" class="advice.LogginAdvice"/>
+	
+	<!-- proxy를 통한 간접 접근 방식 -->
+	<bean id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<ref local="targetBean"/>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>myAdvisor</value><!--  Advisor 를 기술  -->
+			</list>
+		</property>
+	</bean>
+	
+	<!--  Advisor ( Advice + pointcut ) -->
+	<bean id="myAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice">
+			<ref local="logginAdvice"/>
+		</property>
+		<property name="pointcut">
+			<bean class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+				<property name="pattern">
+					<value>.*sayHello*.</value>
+				</property>
+			</bean>		
+		</property>
+	</bean>
+</beans>

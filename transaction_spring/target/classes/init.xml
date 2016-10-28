@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+	<!--  핵심 객체 -->
+	<bean id="fooInterImpl" class="transaction_spring.FooInterImpl"/>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/test"/>
+		<property name="username" value="root"/>
+		<property name="password" value="123"/>
+	</bean>
+	
+	<!-- 
+	DataSourceTransactionManager
+	  : dataSource 를 프로퍼티를 통해  전달받은 dataSource로 부터 connection 을 가져온 뒤
+	  connection의 commit(), rollback() 등의 메소드를 사용해 트랜젝션을 관리한다.
+	  그러니까 애는 트랜젝션의 경계를 결정해 준다.
+	 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>	
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="pt" expression="execution(* transaction_spring.FooInter*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
+	</aop:config>
+</beans>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	<!-- 
+	<bean id="processInterImpl" class="spr4_di_setter.ProcessInterImpl">
+		<property name="age" value="23"/>	
+		<property name="name" value="한국인"/>
+		<property name="showInter" ref="showData"></property>
+	</bean>
+	<bean id="showData" class="spr4_di_setter.ShowData"/>
+	 -->
+	 <!-- 두번째 방법 -->
+	 <!-- 
+	 <bean id="processInterImpl" class="spr4_di_setter.ProcessInterImpl">
+	 	<property name="age">
+	 		<value>25</value>
+	 	</property>
+	 	<property name="name">
+	 		<value>홍길동</value>
+	 	</property>
+	 	<property name="showInter">
+	 		<bean class="spr4_di_setter.ShowData"></bean>
+	 	</property>
+	 </bean>
+	  -->
+	  <!-- Namespaces 탭에서 p 추가 ( 3번째 방법)  위에 스키마 추가됨 -->
+	  <!--  3번째 방법 -->
+	 <bean id="processInterImpl" class="spr4_di_setter.ProcessInterImpl" 
+	 	p:age="27" p:name="손오공" p:showInter-ref="showData"/>
+
+	<bean id="showData" class="spr4_di_setter.ShowData"/>
+</beans>
